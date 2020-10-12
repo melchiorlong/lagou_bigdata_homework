@@ -1,0 +1,49 @@
+-- 第一题
+-- 1、查询平均成绩大于70分的同学的学号,姓名,和平均成绩
+-- 1.1 分组查询每个学生的 学号,姓名,平均分
+-- 1.2 增加条件：平均成绩大于70
+    select stu.id as 学号,
+           stu.NAME as 姓名,
+           avg(score) as 平均分 from student stu
+    inner join student_course sc on stu.id = sc.student_id
+    group by stu.id having avg(score) > 70
+    order by avg(score) desc;
+
+-- 第二题
+-- 2. 查询所有同学的学号、姓名、选课数、总成绩
+-- 2.1 需要查询两张表 student表和 student_course表
+-- 2.2 需要使用 student_id 学号字段,进行分组
+-- 2.3 需要使用到 count函数 sum函数
+    select stu.id as 学号,
+           stu.NAME as 姓名,
+           count(sc.course_id) as 选课数,
+           sum(sc.score) as 总成绩
+    from student stu
+    inner join student_course sc on stu.id = sc.student_id
+    group by stu.id;
+
+-- 第三题
+-- 3. 查询学过赵云老师课程的同学的学号、姓名
+-- 3.1 查询赵云老师的id
+-- 3.2 根据老师ID,在课程表中查询所教的课程编号
+-- 3.3 将上面的子查询作为 where 后面的条件
+    select stu.id as 学号,
+           stu.NAME as 姓名
+    from student stu
+    inner join student_course sc on stu.id = sc.student_id
+    inner join course c on sc.course_id = c.id
+    inner join teacher t on c.teacher_id = t.id
+    where t.NAME = '赵云';
+
+
+-- 第四题
+-- 4. 查询选课 少于三门学科的学员
+-- 4.1 查询每个学生学了几门课 条件1：小于等于三门
+-- 4.2 查询 学号和姓名， 将4.1 作为临时表
+    select s.id as 学号,
+           s.NAME as 姓名,
+           count(course_id) as 选课数
+    from student_course sc
+    inner join student s on sc.student_id = s.id
+    group by student_id having count(course_id) <= 3;
+
