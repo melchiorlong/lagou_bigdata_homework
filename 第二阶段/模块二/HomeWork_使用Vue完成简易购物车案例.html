@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue入门</title>
+    <!--    1、 引入Vue.js-->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script>
+
+
+    </script>
+</head>
+<body>
+<!--
+1、展示页面
+2、删除功能
+3、添加功能
+-->
+<div id="app">
+    <table border="1px" width="50%" height="450px" align="center" cellspacing="0">
+        <tr>
+            <th>序号</th>
+            <th>书籍名称</th>
+            <th>出版日期</th>
+            <th>价格</th>
+            <th>购买数量</th>
+            <th>操作</th>
+        </tr>
+        <tr v-for="(item, index) in items" align="center">
+            <td>{{index + 1}}</td>
+            <td>{{item.name}}</td>
+            <td>{{item.date}}</td>
+            <td>{{item.price}}</td>
+            <td>
+                <input type="button" value="-" id="decreaseBtn" @click.prevent="decreaseItem(index)">
+                {{item.count}}
+                <input type="button" value="+" id="increaseBtn" @click="increaseItem(index)">
+            </td>
+            <td><input type="button" id="deleteBtn" value="移除" @click.prevent="deleteItem(index)"></td>
+        </tr>
+        <tr>
+            <td colspan="6">
+                <span>
+                    总价格：￥{{priceSummary}}
+                </span>
+            </td>
+        </tr>
+    </table>
+</div>
+</body>
+<script>
+    new Vue({
+        el: "#app",
+        data: {
+            items: [
+                {
+                    name: "《java编程思想》",
+                    date: "2020/9",
+                    price: "98.00",
+                    count: 1
+                },
+                {
+                    name: "《数据分析与数据原理》",
+                    date: "2019/2",
+                    price: "39.00",
+                    count: 1
+                },
+                {
+                    name: "《Hadoop权威指南》",
+                    date: "2019/10",
+                    price: "59.00",
+                    count: 1
+                },
+                {
+                    name: "《代码大全》",
+                    date: "2018/8",
+                    price: "128.00",
+                    count: 1
+                }]
+        },
+        computed: {
+            priceSummary() {
+                var sumPrice = 0;
+                for (let i = 0; i < this.items.length; i++) {
+                    sumPrice += this.items[i].count * this.items[i].price;
+                }
+                return sumPrice;
+            }
+        },
+        methods: {
+            deleteItem: function (index) {
+                // 确实是否删除提示
+                if (confirm("是否确认删除")) {
+                    // 删除一行
+                    this.items.splice(index, 1);
+                }
+            },
+            decreaseItem: function (index) {
+                if (this.items[index].count > 1) {
+                    this.items[index].count -= 1;
+                }
+            },
+            increaseItem: function (index) {
+                this.items[index].count += 1;
+            },
+        }
+    })
+
+
+</script>
+</html>
