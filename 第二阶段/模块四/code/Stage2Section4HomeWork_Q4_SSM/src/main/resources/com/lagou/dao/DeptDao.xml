@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.lagou.dao.DeptDao">
+    <!--查询所有账户-->
+    <select id="findAll" resultType="com.lagou.domain.Dept">
+        select * from dept
+    </select>
+<!--
+    &lt;!&ndash;添加账户&ndash;&gt;
+    <insert id="save" parameterType="com.lagou.domain.Person">
+        insert into dept (personName, positionId, phone)
+        values (#{personName}, #{positionId}, #{phone})
+    </insert>
+
+    &lt;!&ndash;根据id查询账户信息&ndash;&gt;
+    <select id="findById" parameterType="int" resultType="com.lagou.domain.Account">
+        select *
+        from account
+        where id = #{id}
+    </select>
+
+    &lt;!&ndash;更新账户信息&ndash;&gt;
+    <select id="update" parameterType="com.lagou.domain.Account">
+        update account
+        set name  = #{name},
+            money = #{money}
+        where id = #{id}
+    </select>
+
+    &lt;!&ndash;批量删除&ndash;&gt;
+    <delete id="deleteBatch" parameterType="int">
+        delete from account
+        <where>
+            <foreach collection="array" open="id in(" close=")" separator="," item="id">
+                #{id}
+            </foreach>
+        </where>
+    </delete>-->
+
+</mapper>
