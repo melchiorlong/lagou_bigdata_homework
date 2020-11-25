@@ -1,0 +1,167 @@
+一、简答题
+
+1.使用top查看系统资源占用情况时，哪一列表示内存占用呢？
+答：%MEM列
+
+2.如果知道一个文件名称，怎么查这个文件在linux下的哪个目录，如：要查找tnsnames.ora文件
+答：find -name tnsnamea.ora
+
+二、编码题
+
+题目要求:
+
+一个张xxx.sql表的大小为156M, 需要用拆分表的工具将表拆分为1024KB的多个文件,请编写shell脚本执行这些sql文件,完成表的创建和数据的插入。 
+
+    PS： 我们提SQL文件 position_type_info_v2.sql  ;  提供拆分表的工具SQLDumpSplitter.exe
+
+二、SQL编程题（总分40分）    要求：提交效果截图或演示视频到码云  
+
+1、题目一
+
+有如下三张数据表
+
+学生表：student(studentNo,studentName,age,sex)
+
+课程表：course(courseNo,courseName,tearcher)
+
+学生得分表：student_course(studentNo,courseNo,grade)
+
+编写SQL语句，完成如下需求
+
+1）查询有课程大于80分又有课程低于60分的学生的学号（5分）
+答：
+select studentNo from (
+select s.studentNo, sc.grade from student s
+inner join student_course sc on sc.studentNo = s.studentNo
+inner join course c on c.courseNo = sc.courseNo
+where sc.grade < 60 or sc.grade > 80) temp
+group by temp.studentNo
+having count(temp.studentNo) > 1
+
+2) 查询各门课程去掉一个最高分和最低分后的平均成绩（5分）
+答：
+select c.courseNo, (sum(sc.grade)-min(sc.grade)-max(sc.grade))/(count(*)-2) as avg from student_course sc
+inner join course c on c.courseNo = sc.courseNo
+group by c.courseNo
+having count(*) > 2
+union
+select c.courseNo,avg(sc.grade) from student_course sc
+inner join course c on c.courseNo = sc.courseNo
+group by c.courseNo
+having count(*) < 2;
+
+
+2、题目二
+
+        表a
+
++----+
+
+| userid |
+
++----+
+
+| 111 |
+
+| 222 |
+
+| 333 |
+
+| 777|
+
++----+
+
+ 
+
+表b
+
++----+
+
+| userid |
+
++----+
+
+| 111 |
+
+| 444|
+
+| 333|
+
++----+
+
+1）编写一段sql，查找a、b表都有的userid（5分）
+答：select userid from a where userid in (select userid from b)
+
+2）编写一段sql，查找a中有b中没有的userid（5分）
+答：select userid from a where userid not in (select userid from b)
+
+3、题目三
+
+编写一个 SQL 查询，查找 Person 表中所有重复的电子邮箱（10分）。
+答：
+select Email from person 
+group by Email
+having count(Email) > 1
+
+示例：
+
++----+---------+
+
+| Id | Email   |
+
++----+---------+
+
+| 1  | a@b.com |
+
+| 2  | c@d.com |
+
+| 3  | a@b.com |
+
++----+---------+
+
+根据以上输入，你的查询应返回以下结果：
+
++---------+
+
+| Email   |
+
++---------+
+
+| a@b.com |
+
++---------+
+
+说明：所有电子邮箱都是小写字母。
+
+4、题目四
+
+编写一个 SQL 查询，获取 Employee 表中第二高的薪水（Salary）（10分） 。
+
+答：
+select ifnull((select distinct grade from student_course order by grade DESC limit 1,1),null) as secondGrade from dual;
+
++----+--------+
+
+| Id | Salary |
+
++----+--------+
+
+| 1  | 100    |
+
+| 2  | 200    |
+
+| 3  | 300    |
+
++----+--------+
+
+例如上述 Employee 表，SQL查询应该返回 200 作为第二高的薪水。如果不存在第二高的薪水，那么查询应返回 null。
+
++---------------------+
+
+| SecondHighestSalary |
+
++---------------------+
+
+| 200                 |
+
++---------------------+
