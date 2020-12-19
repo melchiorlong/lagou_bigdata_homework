@@ -1,0 +1,3 @@
+type=command
+dependencies=import
+command=/opt/lagou/servers/hive-2.3.7/bin/hive -f 'analysis.sql'
